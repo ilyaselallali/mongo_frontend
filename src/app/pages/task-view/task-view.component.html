@@ -13,7 +13,10 @@
 
       </div>
 
-      <button class="button is-primary has-text-white" routerLink="/new-list" (click)="createList()">+ New List</button>
+      <button class="button is-primary has-text-white" routerLink="/new-list" >+ New List</button>
+      <button class="button is-danger has-text-white"  (click)="onLogOut()">logout</button>
+      <button class="button is-danger has-text-white"  (click)="goToDashboard()">View My Dashboard</button>
+
 
     </div>
 
@@ -58,7 +61,7 @@
             </button>
 
             <button class="button is-danger" (click)="onDeleteTaskClick(task._id)" style="margin-left: 10px;">
-              <div class="icon">
+              <div class="icon">delT
                 <i class="fas fa-trash"></i>
               </div>
             </button>

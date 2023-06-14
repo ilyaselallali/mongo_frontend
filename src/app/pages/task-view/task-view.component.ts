@@ -3,6 +3,7 @@ import {List} from "../../models/list.model";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import { Task } from 'src/app/models/task.model';
 import {TaskService} from "../../task.service";
+import {AuthService} from "../../auth.service";
 //import {TaskService} from "../../task.service";
 
 
@@ -13,28 +14,40 @@ import {TaskService} from "../../task.service";
 })
 export class TaskViewComponent implements OnInit{
   lists!: any[];
-  tasks!: any[];
+  tasks!: any;
 
   selectedListId!: string;
 
-  constructor( private taskService : TaskService,private route: ActivatedRoute, private router: Router) { }
+  constructor( private taskService : TaskService,private authService : AuthService, private route: ActivatedRoute, private router: Router) { }
   ngOnInit() {
+
     this.route.params.subscribe(
       (params: Params) => {
+        if (params['listId']) {
+          this.selectedListId = params['listId'];
           this.taskService.getTasks(params['listId']).subscribe((tasks: any) => {
             this.tasks = tasks;
           })
-
+        } else {
+          this.tasks = undefined;
+        }
       }
     )
     this.taskService.getLists().subscribe((lists: any) => {
       this.lists = lists;})
+
   }
-  createList() {
+  onLogOut(){
+    this.authService.logout();
+  }
+  goToDashboard(){
+    this.authService.goToDashboard();
+  }
+ /* createList() {
     this.taskService.createList("testing").subscribe((response : any) => {
       console.log("params : " + response);
       });
-  }
+  }*/
 
   onTaskClick(task: Task) {
     // we want to set the task to completed
@@ -46,17 +59,17 @@ export class TaskViewComponent implements OnInit{
   }
 
   onDeleteListClick() {
-/*    this.taskService.deleteList(this.selectedListId).subscribe((res: any) => {
+   this.taskService.deleteList(this.selectedListId).subscribe((res: any) => {
       this.router.navigate(['/lists']);
       console.log(res);
-    })*/
+    })
   }
 
   onDeleteTaskClick(id: string) {
-/*    this.taskService.deleteTask(this.selectedListId, id).subscribe((res: any) => {
-      this.tasks = this.tasks.filter(val => val._id !== id);
+  this.taskService.deleteTask(this.selectedListId, id).subscribe((res: any) => {
+      this.tasks = this.tasks.filter((val :any) => val._id !== id);
       console.log(res);
-    })*/
+    })
   }
 
 
